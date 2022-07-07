@@ -23,6 +23,7 @@ app.use(function (req, res, next) {
 });
 
 app.use('/static', express.static(__dirname + '/static'));
+app.use('/demo', express.static(__dirname + '/demo'));
 
 app.get('/', function getState(req,res){
     res.setHeader('Content-Type', 'text/html');

@@ -53,16 +53,17 @@
    - `https://unpkg.com/ likeme@latest/static/css/likeme.css`。
    - `https://unpkg.com/ likeme@latest/static/js/likeme.js`。
 
-1. 创建 `<script>` 标签使用 `new limeMe()` 初始化，并传入必要的 `el` 与 `serverURL` 选项。
+2. 创建 `<script>` 标签使用 `new limeMe()` 初始化，并传入必要的 `el` 与 `serverURL` 选项。
 
    - `el` 选项是 `likeMe` 渲染使用的元素，你可以设置一个字符串形式的  `CSS 选择器` 或者一个 `HTMLElement` 对象。
    - `serverURL` 是服务端的地址，即上一步获取到的值。
+   - `color` 是卡片的背景颜色 (可选)。
 
    ```html {3-7,12-18}:line-numbers
    <head>
     <!-- ... -->
-     <link rel="stylesheet" href='https://unpkg.com/likeme@latest/static/css/likeme.css'/>
-     <script src="https://unpkg.com/likeme@latest/static/js/likeme.js"></script>
+     <link rel="stylesheet" href='https://unpkg.com/@5ime/likeme@latest/static/css/likeme.css'/>
+     <script src="https://unpkg.com/@5ime/likeme@latest/static/js/likeme.js"></script>
     <!-- ... -->
    </head>
    <body>
