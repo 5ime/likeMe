@@ -42,17 +42,40 @@ app.get('/info', (req,res) => {
 })
 
 app.get('/like', (req, res) => {
-    account.increment('count', +1);
-    account.save(null, {
-        query: new AV.Query('likeCount').greaterThanOrEqualTo('count', +1),fetchWhenSave: true
-    }).then((account) => {
-        const data = {code: '200', msg: 'success', data: {count: account.attributes.count}}
-        res.send(data);
-    }, (error) => {
-        if (error.code === 305) {
-            const data = {code: '201', msg: 'error'}
+    const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.socket.remoteAddress || req.connection.socket.remoteAddress;
+    const queryIP = new AV.Query('likeUser').equalTo('ip', ip);
+    queryIP.find().then(function (results) {
+        console.log(results)
+        if (results.length > 0) {
+            const data = {code: '201', msg: '你的爱意已经收到啦~'}
             res.send(data);
+        } else {
+            const Like = AV.Object.extend('likeUser');
+            const like = new Like();
+            like.set('ip', ip);
+            const acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            like.setACL(acl);
+            like.save().then((like) => {
+                account.increment('count', +1);
+                account.save(null, {
+                    query: new AV.Query('likeCount').greaterThanOrEqualTo('count', +1),fetchWhenSave: true
+                }).then((account) => {
+                    const data = {code: '200', msg: 'success', data: {count: account.attributes.count}}
+                    res.send(data);
+                }, (error) => {
+                    if (error.code === 305) {
+                        const data = {code: '201', msg: 'error'}
+                        res.send(data);
+                    }
+                });
+            }, (error) => {
+                console.error('Failed to create new object, with error message: ' + error.message);
+            });
         }
+    }).catch(function (error) {
+        const data = {code: '201', msg: 'error'}
+        res.send(data);
     });
 })
 
