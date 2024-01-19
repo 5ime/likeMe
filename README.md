@@ -51,8 +51,8 @@
 
 1. 使用 `CDN` 引入 `likeMe`:
 
-   - `https://unpkg.com/ likeme@latest/static/css/likeme.css`。
-   - `https://unpkg.com/ likeme@latest/static/js/likeme.js`。
+   - `https://unpkg.com/@5ime/likeme@latest/static/css/likeme.css`。
+   - `https://unpkg.com/@5ime/likeme@latest/static/js/likeme.js`。
 
 2. 创建 `<script>` 标签使用 `new limeMe()` 初始化，并传入必要的 `el` 与 `serverURL` 选项。
 
