@@ -1,6 +1,6 @@
 {
-  "name": "likeme",
-  "version": "1.1.1",
+  "name": "@5ime/likeme",
+  "version": "1.0.2",
   "description": "Do you like me?",
   "main": "index.js",
   "dependencies": {
