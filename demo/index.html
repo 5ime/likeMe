@@ -1,21 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Do You Like Me?</title>
-    <link rel="stylesheet" href="https://unpkg.com/@5ime/likeme@latest/static/css/likeme.css">
+    <meta name="description" content="Do You Like Me? - 组件演示页面">
+    <meta name="keywords" content="点赞,互动,like,web组件,演示">
+    <title>Do You Like Me? - 演示页面</title>
+    <link rel="stylesheet" href="/static/css/likeme.css">
+    <style>
+        .container {
+            margin: 0 auto;
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .demo-info {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
-    <div id="likeme"></div>
+    <div class="container">
+        <div class="demo-info">
+            <h2>LikeMe 组件演示</h2>
+            <p>这是一个可交互的点赞组件演示页面</p>
+        </div>
+        <div id="likeme"></div>
+    </div>
 
-    <script src="https://unpkg.com/@5ime/likeme@latest/static/js/likeme.js"></script>
+    <script src="/static/js/likeme.js"></script>
     <script>
         likeMe({
             el: '#likeme',
             serverURL: `${location.protocol}//${location.host}`,
-            color: '#ff4e6a',
+            color: '#ff4e6a'
         });
     </script>
 </body>
