@@ -1,60 +1,18 @@
 # likeMe - 一个可爱的互动点赞组件
 
-> 🍰 快速为你的网站添加 "你喜欢我吗 / Do you like me" 小组件
-
----
+快速给你的网站加一个「你喜欢我吗 / Do you like me」小组件。服务端可部署在 Vercel，点赞数据存 Vercel Postgres（Neon）。
 
 ## 功能特性
 
-- 🎨 **可自定义颜色** - 支持自定义主题色彩
-- 💾 **数据持久化** - 使用LeanCloud存储点赞数据
-- 🚀 **快速部署** - 一键部署到Vercel
-- 📱 **响应式设计** - 完美适配移动端和桌面端
-- 🔒 **防重复点赞** - 基于IP地址防止重复点赞
-- ⚡ **高性能** - 轻量级，加载速度快
+- 🎨 简洁可爱的 UI 设计
+- 🚀 一键部署到 Vercel
+- 💾 数据存储在 Vercel Postgres（Neon）
+- 🔒 防刷机制：同一 IP 每天只能点赞一次
+- ⚡ 自动缓存优化，减少数据库查询
+- 📦 支持 CDN 和本地文件两种使用方式
+- 🎯 支持自定义主题颜色
 
----
-
-## 快速开始
-
-### 1. LeanCloud 设置
-
-1. [登录](https://console.leancloud.app/login) 或 [注册](https://console.leancloud.app/register) `LeanCloud 国际版` 并进入 [控制台](https://console.leancloud.app/apps)。
-2. 点击左上角 [创建应用](https://console.leancloud.app/apps) 并起一个你喜欢的名字（请选择免费的 **开发版**）。
-3. 进入应用，选择左下角的 **设置 > 应用凭证**，你可以看到你的 **APP ID**、**APP Key** 和 **REST API 服务器地址**，请记录它们以备后续使用。
-
-### 2. 创建数据表
-
-进入应用，选择左上角的 **数据存储 > 结构化数据**，依次创建以下两个 Class：
-
-#### 创建 likeCount 表
-- **Class 名称**：`likeCount`
-- **Class 访问权限**：除 `update` 和 `find` 外均选择 **指定用户**
-- **默认 ACL 权限**：选定为 **限制读取**，然后点击 **创建**
-
-#### 创建 likeUser 表
-- **Class 名称**：`likeUser`
-- **Class 访问权限**：除 `create` 和 `find` 外均选择 **指定用户**
-- **默认 ACL 权限**：选定为 **限制读取**，然后点击 **创建**
-
-### 3. 初始化数据
-
-1. 选择新建的 `likeCount` Class，点击 **添加行**
-2. 添加一个名为 `count` 的 **Number** 字段，设置值为 `0`
-3. 将 **ACL 权限** 设置为 **所有用户**，点击 **添加**
-4. 记录生成行的 `objectId`
-
-此时你应该拥有以下信息：
-- `APP ID`
-- `APP Key`
-- `REST API 服务器地址`
-- `objectId` 🎉
-
----
-
-## 部署到 Vercel
-
-### 方法一：一键部署
+## 一键部署
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/5ime/likeMe)
 
@@ -63,65 +21,44 @@
 3. 等待部署完成
 4. 点击 **Go to Dashboard** 跳转到控制台
 
-### 方法二：手动部署
+## 配置数据库
 
-1. Fork 或 Clone 本项目到你的 GitHub
-2. 在 Vercel 中导入你的项目
-3. 配置构建设置（通常会自动检测）
+本项目使用 Vercel Postgres（底层是 Neon）。你只需要在 Vercel 给当前项目绑定数据库，并确保环境变量里存在 `POSTGRES_URL`。
 
-### 配置环境变量
+### 1. 在 Vercel 创建并绑定数据库
 
-进入 **Settings > Environment Variables** 配置以下环境变量：
+1. 打开你的 Vercel 项目
+2. 进入 **Storage**
+3. 点击 **Create Database**，选择 **Neon**
+4. 选择要绑定到的项目（通常就是当前项目）并创建
 
-| 变量名 | 说明 | 示例 |
-|--------|------|------|
-| `appId` | LeanCloud 的 APP ID | `your-app-id` |
-| `appKey` | LeanCloud 的 APP Key | `your-app-key` |
-| `serverURL` | LeanCloud 的 REST API 服务器地址 | `https://your-app.lc-cn-n1-shared.com` |
-| `objectId` | likeCount 表中记录的 objectId | `your-object-id` |
+### 2. 确认环境变量已注入
 
-### 重新部署
+创建完成后，Vercel 通常会自动把数据库连接信息注入到项目环境变量中。
 
-环境变量配置完成后，进入 **Deployments**，找到最新一次部署并点击 **Redeploy** 按钮以使环境变量生效。
+- 进入 **Settings > Environment Variables**
+- 搜索并确认存在：`POSTGRES_URL`
 
-部署完成后，点击 **Visit** 跳转到部署好的地址，此地址即为你的服务端地址。
+如果没有自动注入，请手动添加：
 
----
+1. 进入 **Storage > Postgres 数据库详情页**
+2. 找到连接字符串（Connection String），复制 `POSTGRES_URL` 对应的值
+3. 回到 **Settings > Environment Variables**，新增变量：
+   - **Name**：`POSTGRES_URL`
+   - **Value**：你复制的连接字符串
+   - **Environments**：勾选 `Production / Preview / Development`
+4. 保存后到 **Deployments** 点击 **Redeploy**（或触发一次新的部署），让最新环境变量生效
 
-## 本地开发
+### 3. 如何验证数据库已可用
 
-### 环境要求
+最简单的方式：访问一次接口触发建表，然后再看是否能正常返回。
 
-- Node.js >= 18.0.0
-- npm 或 yarn
+- `GET /healthz`：服务是否存活（返回 `ok`）
+- `GET /info`：会读取数据库并返回当前点赞数
 
-### 安装依赖
+如果数据库连不上，你通常会在 Vercel 的 **Logs** 里看到与连接/鉴权相关的报错（例如环境变量缺失、连接串无效等）。
 
-```bash
-npm install
-```
-
-### 配置环境变量
-
-创建 `.env` 文件（或在系统环境变量中设置）：
-
-```bash
-appId=your-leancloud-app-id
-appKey=your-leancloud-app-key
-serverURL=your-leancloud-server-url
-objectId=your-object-id
-PORT=3000
-```
-
-### 启动开发服务器
-
-```bash
-npm start
-```
-
-服务器将在 `http://localhost:3000` 启动。
-
----
+> 本项目会在首次请求时自动建表（`like_count` / `like_user`），无需手动建表。
 
 ## 在你的网站中使用
 
@@ -138,7 +75,7 @@ npm start
 <script>
     likeMe({
         el: '#likeme',
-        serverURL: 'https://your-domain.vercel.app', // 替换为你的服务端地址
+        serverURL: 'https://your-domain.vercel.app', // 替换为你的服务端地址，结尾勿带 /
         color: '#ff9797' // 可选：自定义主题颜色
     });
 </script>
@@ -154,59 +91,109 @@ npm start
 
 ```javascript
 likeMe({
-    el: '#likeme',                    // 必需：容器选择器
-    serverURL: 'https://your-domain.vercel.app',  // 必需：服务端地址
-    color: '#ff9797'                  // 可选：主题颜色，默认为 #ff9797
+    el: '#likeme',                                  // 必需：容器选择器
+    serverURL: 'https://your-domain.vercel.app',    // 必需：服务端地址，结尾勿带 /
+    color: '#ff9797'                                // 可选：主题颜色，默认为 #ff9797
 });
 ```
 
----
+## 本地开发
 
-## 自定义域名（可选）
+环境：Node.js >= 18
 
-1. 进入 `Vercel` 控制台的 **Settings > Domains**
-2. 输入需要绑定的域名并点击 **Add**
-3. 在域名服务商处添加 `CNAME` 记录：
-   - **Type**: `CNAME`
-   - **Name**: `your-subdomain`
-   - **Value**: `cname.vercel-dns.com`
-4. 等待 `DNS` 生效后，即可通过自定义域名访问 🎉
+```bash
+npm install
+```
 
----
+创建 `.env`：
+
+```bash
+POSTGRES_URL=postgres://...
+PORT=3000
+ALLOW_ORIGIN=*
+TRUST_PROXY=1
+INFO_CACHE_SECONDS=5
+LIKE_RATE_LIMIT_WINDOW_MS=60000
+LIKE_RATE_LIMIT_MAX=20
+```
+
+启动项目：
+
+```bash
+npm start
+```
+
+- `PORT` 可选，默认 `3000`
+- `ALLOW_ORIGIN` 可选，默认 `*`（如需限制跨域可填你的站点域名）
+- `TRUST_PROXY` 默认 `1`，用于正确识别客户端 IP。
+- `/info` 默认缓存 5 秒；`/like` 默认每 IP 每分钟 20 次。
 
 ## API 接口
 
-### 获取点赞数
+### `GET /info`
 
-```
-GET /info
-```
+获取当前点赞数。
 
-返回：
+**响应格式：**
+
+成功：
 ```json
 {
-    "code": "200",
-    "data": {
-        "count": 42
-    },
-    "msg": "success"
+  "code": "200",
+  "msg": "success",
+  "data": {
+    "count": 123
+  }
 }
 ```
 
-### 提交点赞
-
-```
-GET /like
-```
-
-返回：
+失败：
 ```json
 {
-    "code": "200",
-    "data": {
-        "count": 43
-    },
-    "msg": "success"
+  "code": "201",
+  "msg": "哎呀，数据偷懒跑掉了"
 }
 ```
 
+**缓存：** 响应头包含 `Cache-Control: public, max-age=5`（默认缓存 5 秒）
+
+### `GET /like`
+
+提交一次点赞。同一 IP 每天只能点赞一次。
+
+**响应格式：**
+
+成功（首次点赞）：
+```json
+{
+  "code": "200",
+  "msg": "success",
+  "data": {
+    "count": 124
+  }
+}
+```
+
+失败（今日已点赞）：
+```json
+{
+  "code": "201",
+  "msg": "今天的爱意已经收到啦~"
+}
+```
+
+失败（系统错误）：
+```json
+{
+  "code": "201",
+  "msg": "你的爱意传递失败~"
+}
+```
+
+**限流：** 默认每 IP 每分钟最多 20 次请求
+
+### `GET /healthz`
+
+健康检查接口，用于检测服务是否正常运行。
+
+**响应：** 纯文本 `ok`（HTTP 200）

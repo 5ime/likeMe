@@ -4,13 +4,14 @@
   "description": "Do you like me? - 一个可爱的互动小组件",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "node index.js"
   },
   "author": "iami233",
   "license": "MIT",
   "dependencies": {
-    "express": "^5.1.0",
-    "leancloud-storage": "^4.15.2"
+    "@vercel/postgres": "^0.10.0",
+    "express": "^5.1.0"
   },
   "engines": {
     "node": ">=18.0.0"
