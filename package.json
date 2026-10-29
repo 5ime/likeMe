@@ -1,14 +1,29 @@
 {
   "name": "@5ime/likeme",
-  "version": "1.0.4",
-  "description": "Do you like me? - 一个可爱的互动小组件",
-  "main": "index.js",
+  "version": "1.0.5",
+  "description": "Do you like me? - 一个可爱的互动点赞组件",
+  "main": "static/js/likeme.js",
+  "unpkg": "static/js/likeme.js",
+  "jsdelivr": "static/js/likeme.js",
+  "style": "static/css/likeme.css",
+  "files": [
+    "static",
+    "README.md"
+  ],
   "scripts": {
     "start": "node index.js",
-    "dev": "node index.js"
+    "dev": "node index.js",
+    "prepare:public": "node scripts/prepare-public.js",
+    "prepublishOnly": "node -e \"const fs=require('fs');['static/css/likeme.css','static/js/likeme.js'].forEach(f=>{if(!fs.existsSync(f)){console.error('missing '+f);process.exit(1)}})\""
   },
   "author": "iami233",
   "license": "MIT",
+  "keywords": [
+    "like",
+    "widget",
+    "embed",
+    "vercel"
+  ],
   "dependencies": {
     "@vercel/postgres": "^0.10.0",
     "express": "^5.1.0"
@@ -20,5 +35,8 @@
     "type": "git",
     "url": "https://github.com/5ime/likeMe.git"
   },
-  "homepage": "https://github.com/5ime/likeMe"
+  "homepage": "https://github.com/5ime/likeMe",
+  "bugs": {
+    "url": "https://github.com/5ime/likeMe/issues"
+  }
 }

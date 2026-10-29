@@ -28,7 +28,10 @@ async function ensureSchema() {
         PRIMARY KEY (ip, day)
       );
     `;
-  })();
+  })().catch((err) => {
+    schemaInitPromise = null;
+    throw err;
+  });
 
   return schemaInitPromise;
 }
@@ -46,23 +49,17 @@ async function likeOncePerDay(ip) {
   try {
     await client.sql`BEGIN;`;
 
-    const exists = await client.sql`
-      SELECT 1
-      FROM like_user
-      WHERE ip = ${ip} AND day = CURRENT_DATE
-      LIMIT 1;
+    const inserted = await client.sql`
+      INSERT INTO like_user (ip, day)
+      VALUES (${ip}, CURRENT_DATE)
+      ON CONFLICT (ip, day) DO NOTHING
+      RETURNING ip;
     `;
 
-    if (exists.rows.length > 0) {
+    if (inserted.rows.length === 0) {
       await client.sql`ROLLBACK;`;
       return { ok: false, reason: 'already_liked_today' };
     }
-
-    await client.sql`
-      INSERT INTO like_user (ip, day)
-      VALUES (${ip}, CURRENT_DATE)
-      ON CONFLICT (ip, day) DO NOTHING;
-    `;
 
     const updated = await client.sql`
       UPDATE like_count
@@ -90,4 +87,3 @@ module.exports = {
   getCurrentCount,
   likeOncePerDay,
 };
-

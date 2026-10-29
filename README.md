@@ -81,11 +81,23 @@
 </script>
 ```
 
-### 方法二：下载使用
+也可以用你自己的 Vercel 域名加载静态资源：
 
-1. 下载 `static/css/likeme.css` 和 `static/js/likeme.js`
-2. 在你的项目中引入这些文件
-3. 按照上面的方式初始化组件
+```html
+<link rel="stylesheet" href="https://your-domain.vercel.app/static/css/likeme.css" />
+<script src="https://your-domain.vercel.app/static/js/likeme.js"></script>
+```
+
+### 方法二：npm 安装
+
+```bash
+npm install @5ime/likeme
+```
+
+然后引入：
+
+- `node_modules/@5ime/likeme/static/css/likeme.css`
+- `node_modules/@5ime/likeme/static/js/likeme.js`
 
 ### 配置选项
 
