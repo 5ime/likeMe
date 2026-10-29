@@ -1,6 +1,6 @@
 {
   "name": "@5ime/likeme",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Do you like me? - 一个可爱的互动点赞组件",
   "main": "static/js/likeme.js",
   "unpkg": "static/js/likeme.js",
